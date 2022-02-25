@@ -1,7 +1,9 @@
 from random import randint
+import sys
 
 
 class Lotto:
+    '''Draw class to get 6 random numbers'''
     NUMBER_OF_DRAWS = 0
 
     def __init__(self):
@@ -11,6 +13,7 @@ class Lotto:
         return str(self._numbers)
 
     def draw(self):
+        '''6 random numbers draw'''
         Lotto.NUMBER_OF_DRAWS += 1
         self._numbers = set()
         while len(self._numbers) < 6:
@@ -18,12 +21,11 @@ class Lotto:
             self._numbers.add(number)
 
     def get_numbers(self):
+        '''6 random getter'''
         return self._numbers
 
 
 class Game:
-    SHORTCUT = '1'
-    LABEL = 'Gramy w totka?'
 
     def __init__(self, numbers: set):
         self.numbers = numbers
@@ -33,12 +35,13 @@ class Game:
     def pick_numbers(cls):
         numbers = set()
         while len(numbers) < 6:
-            number = input('Podaj liczbę od 1 do 49: ')
+            number = input('Pick number from 1 to1 49: ')
             try:
                 number = int(number)
-                numbers.add(number)
+                if number in range(1, 49):
+                    numbers.add(number)
             except ValueError:
-                print('Spróbuj jeszcze raz')
+                print('Try number')
         return cls(numbers)
 
     def draws(self):
@@ -57,46 +60,55 @@ class Game:
             if self.wins.get(6):
                 break
 
-    def consumed_time(self):
-        number_of_game = Lotto.NUMBER_OF_DRAWS
-        print(f'Years: {number_of_game/52:,}')
+    def show_numbers(self):
+        return self.numbers
 
-    def consumed_money(self):
+    @staticmethod
+    def consumed_time():
         number_of_game = Lotto.NUMBER_OF_DRAWS
-        print(f'Money: {number_of_game*3:,}')
+        return int(number_of_game / 52)
+
+    @staticmethod
+    def consumed_money():
+        number_of_game = Lotto.NUMBER_OF_DRAWS
+        return number_of_game * 3
 
     def show_summary(self):
-        for key, value in sorted(self.wins.items()):
-            print(f'{key}: {value}')
-        self.consumed_time()
-        self.consumed_money()
+        time = Game.consumed_time()
+        money = Game.consumed_money()
+        for key, value in sorted(self.wins.items())[1:]:
+            print(f'You get 0 hits:{key}: {value} times')
+        print(f'6 was hit after: {time:,}')
+        print(f'You spend for this: {money:,} PLN')
 
 
 class App:
 
-    def menu(self):
+    def __init__(self):
         self.options = {
-            1: 'Gramy w totka',
-            'z': 'Kończymy'
+            1: 'Play lotto',
+            'z': 'End of game'
         }
-        return self.options
+
+    @staticmethod
+    def exit_game():
+        sys.exit()
 
     def run(self):
         while True:
             print('_'*50)
             for key, value in self.options.items():
                 print(f'[{key}] - {value}')
-            option = input('Wybierz jedną: ').lower()
+            option = input('Pick one: ').lower()
             if option == 'z':
-                exit()
+                App.exit_game()
             game = Game.pick_numbers()
+            print(game.show_numbers())
             game.draws()
             game.show_summary()
 
 
 if __name__ == '__main__':
 
-    while True:
-        app = App()
-        app.menu()
-        app.run()
+    app = App()
+    app.run()
