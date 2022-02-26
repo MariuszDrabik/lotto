@@ -83,7 +83,7 @@ class Game:
 
     @staticmethod
     def save_number_of_numbers(numbers: set):
-        """Geting number form draw and save to dict
+        """Getting number form draw and save to dict
 
         Args:
             numbers (set): get number from draw
