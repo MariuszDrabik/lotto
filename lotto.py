@@ -1,3 +1,8 @@
+'''
+Main progam module Lotto
+Program show how lotto is not profitable
+'''
+
 from random import randint
 import sys
 
@@ -26,25 +31,17 @@ class Lotto:
 
 
 class Game:
+    '''
+        Main game class to start draws after collected numbers from user
+        and show stats
+    '''
 
     def __init__(self, numbers: set):
         self.numbers = numbers
         self.wins = {}
 
-    @classmethod
-    def pick_numbers(cls):
-        numbers = set()
-        while len(numbers) < 6:
-            number = input('Pick number from 1 to1 49: ')
-            try:
-                number = int(number)
-                if number in range(1, 49):
-                    numbers.add(number)
-            except ValueError:
-                print('Try number')
-        return cls(numbers)
-
     def draws(self):
+        ''' Making Lotto class until 6 is hit '''
         while True:
             lotto = Lotto()
             lotto.draw()
@@ -61,28 +58,38 @@ class Game:
                 break
 
     def show_numbers(self):
-        return self.numbers
+        ''' Function to show chosen number by user in nice way '''
+        show = ''
+        for i in self.numbers:
+            show += f'[{str(i)}] '
+        return show
 
     @staticmethod
     def consumed_time():
+        '''Time statistic'''
         number_of_game = Lotto.NUMBER_OF_DRAWS
         return int(number_of_game / 52)
 
     @staticmethod
     def consumed_money():
+        '''Money lost'''
         number_of_game = Lotto.NUMBER_OF_DRAWS
         return number_of_game * 3
 
     def show_summary(self):
+        '''Showing all statistic'''
         time = Game.consumed_time()
         money = Game.consumed_money()
         for key, value in sorted(self.wins.items())[1:]:
-            print(f'You get 0 hits:{key}: {value} times')
-        print(f'6 was hit after: {time:,}')
-        print(f'You spend for this: {money:,} PLN')
+            print(f'You get hits {key}: {value} times')
+        print(f'6 was hit after {time:,} years')
+        print(f'You spend for this {money:,} PLN')
 
 
 class App:
+    '''
+        Main App class to draw menu manage user imputs
+    '''
 
     def __init__(self):
         self.options = {
@@ -91,18 +98,30 @@ class App:
         }
 
     @staticmethod
-    def exit_game():
-        sys.exit()
+    def pick_numbers():
+        ''' take numbers from user '''
+        numbers = set()
+        while len(numbers) < 6:
+            number = input('Pick number from 1 to1 49: ')
+            try:
+                number = int(number)
+                if number in range(1, 49):
+                    numbers.add(number)
+            except ValueError:
+                print('Try number')
+        return numbers
 
     def run(self):
+        ''' run method'''
         while True:
             print('_'*50)
             for key, value in self.options.items():
                 print(f'[{key}] - {value}')
             option = input('Pick one: ').lower()
             if option == 'z':
-                App.exit_game()
-            game = Game.pick_numbers()
+                sys.exit()
+            chosen_numbers = App.pick_numbers()
+            game = Game(chosen_numbers)
             print(game.show_numbers())
             game.draws()
             game.show_summary()
