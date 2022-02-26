@@ -32,8 +32,8 @@ class Lotto:
 
 class Game:
     '''
-        Main game class to start draws after collected numbers from user
-        and show stats
+        Main game class to start draws after collected numbers
+        from user and show stats
     '''
 
     def __init__(self, numbers: set):
@@ -41,7 +41,7 @@ class Game:
         self.wins = {}
 
     def draws(self):
-        ''' Making Lotto class until 6 is hit '''
+        '''Making Lotto class until 6 is hit'''
         while True:
             lotto = Lotto()
             lotto.draw()
@@ -58,7 +58,7 @@ class Game:
                 break
 
     def show_numbers(self):
-        ''' Function to show chosen number by user in nice way '''
+        '''Function to show chosen number by user in nice way'''
         show = ''
         for i in self.numbers:
             show += f'[{str(i)}] '
@@ -87,19 +87,17 @@ class Game:
 
 
 class App:
-    '''
-        Main App class to draw menu manage user imputs
-    '''
+    '''Main App class to draw menu manage user inputs'''
 
     def __init__(self):
         self.options = {
             1: 'Play lotto',
-            'z': 'End of game'
+            0: 'End of game'
         }
 
     @staticmethod
     def pick_numbers():
-        ''' take numbers from user '''
+        '''Take numbers from user'''
         numbers = set()
         while len(numbers) < 6:
             number = input('Pick number from 1 to1 49: ')
@@ -111,20 +109,28 @@ class App:
                 print('Try number')
         return numbers
 
+    @staticmethod
+    def game():
+        '''Game procedure'''
+        chosen_numbers = App.pick_numbers()
+        game = Game(chosen_numbers)
+        print(game.show_numbers())
+        game.draws()
+        game.show_summary()
+
     def run(self):
-        ''' run method'''
+        '''Run method'''
         while True:
             print('_'*50)
             for key, value in self.options.items():
                 print(f'[{key}] - {value}')
             option = input('Pick one: ').lower()
-            if option == 'z':
+            if option == 0:
                 sys.exit()
-            chosen_numbers = App.pick_numbers()
-            game = Game(chosen_numbers)
-            print(game.show_numbers())
-            game.draws()
-            game.show_summary()
+            elif option == 1:
+                App.game()
+            else:
+                print('Not correct choice')
 
 
 if __name__ == '__main__':
