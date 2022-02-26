@@ -15,7 +15,7 @@ def test_lotto():
 def test_game():
     game = Game({12, 34, 14, 23, 43, 33})
 
-    game.draws()
+    game.play_to_win()
     time = Game.consumed_time()
     money = Game.consumed_money()
 
