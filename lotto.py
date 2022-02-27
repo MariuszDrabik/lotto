@@ -114,7 +114,7 @@ class Game:
         data.update({"Number of draws": Lotto.NUMBER_OF_DRAWS})
         data.update(Game.NUMBER_STATS)
         if glob.glob(file_name):
-            with open(file_name, 'r+') as file:
+            with open(file_name, 'r+', encoding='utf-8') as file:
                 data_f = load(file)
                 print(data)
                 file.truncate(0)
@@ -127,7 +127,7 @@ class Game:
 
                 dump(data_f, file, indent=3)
         else:
-            with open(file_name, 'w') as save:
+            with open(file_name, 'w', encoding='utf-8') as save:
                 dump(data, save, indent=3)
 
 
