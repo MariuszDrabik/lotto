@@ -78,8 +78,8 @@ class Game:
         money = Game.consumed_money()
         for key, value in sorted(self.wins.items())[1:]:
             print(f'You get hits {key}: {value} times')
-        print(f'6 was hit after {time:,} years')
-        print(f'You spend for this {money:,} PLN')
+        print(f'6 was hit after {time}: years')
+        print(f'You spend for this {money}: PLN')
 
     @staticmethod
     def save_number_of_numbers(numbers: set):
